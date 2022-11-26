@@ -1,34 +1,40 @@
 # Convolutional Autoencoder for Image Denoising
-
 ## AIM
-
 To develop a convolutional autoencoder for image denoising application.
 
 ## Problem Statement and Dataset
+Autoencoder is an unsupervised artificial neural network that is trained to copy its input to output. An autoencoder will first encode the image into a lower-dimensional representation, then decodes the representation back to the image.The goal of an autoencoder is to get an output that is identical to the input. MNIST is a dataset of black and white handwritten images of size 28x28.Denoising is the process of removing noise. This can be an image, audio, or document.These noisy digits will serve as our input data to our encoder. Autoencoders uses MaxPooling, convolutional and upsampling layers to denoise the image.
 
-![image](https://user-images.githubusercontent.com/75235813/201460551-99b57c03-8dd9-4ec2-9d7c-1772acf980c4.png)
+![image](https://user-images.githubusercontent.com/75236145/201667536-6222e70d-7d3d-462c-ad69-d4733edca7e0.png)
+
 ## Convolution Autoencoder Network Model
-
+![image](https://user-images.githubusercontent.com/75236145/201667585-fbda3e32-5896-42ea-beda-087075796e7c.png)
 
 ## DESIGN STEPS
 ### Step 1:
 Import the necessary libraries and dataset.
+
 ### Step 2:
 Load the dataset and scale the values for easier computation.
+
 ### Step 3:
 Add noise to the images randomly for both the train and test sets.
+
 ### Step 4:
 Build the Neural Model using Convolutional, Pooling and Up Sampling layers. Make sure the input shape and output shape of the model are identical.
+
 ### Step 5:
 Pass test data for validating manually.
+
 ### Step 6:
 Plot the predictions for visualization.
 
 ## PROGRAM
-```
+```python
 Developed by: Swetha.K.P
 Register no.: 212220230053
-
+```
+```python
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras import utils
@@ -59,15 +65,15 @@ for i in range(1, n + 1):
 plt.show()
 input_img = keras.Input(shape=(28, 28, 1))
 
-# Write your encoder here
+## Write your encoder here
 x=layers.Conv2D(32,(3,3),activation='relu',padding='same')(input_img)
 x=layers.MaxPooling2D((2, 2), padding='same')(x)
 x=layers.Conv2D(32,(3,3),activation='relu',padding='same')(x)
 encoded = layers.MaxPooling2D((2, 2), padding='same')(x)
 
-# Encoder output dimension is ## Mention the dimention ##
+## Encoder output dimension is ## Mention the dimention ##
 
-# Write your decoder here
+## Write your decoder here
 x=layers.Conv2D(32,(3,3),activation='relu',padding='same')(encoded)
 x=layers.UpSampling2D((2,2))(x)
 x=layers.Conv2D(32,(3,3),activation='relu',padding='same')(x)
@@ -81,25 +87,29 @@ autoencoder.fit(x_train_noisy, x_train_scaled,
                 batch_size=128,
                 shuffle=True,
                 validation_data=(x_test_noisy, x_test_scaled))
+import pandas as pd
+metrics = pd.DataFrame(autoencoder.history.history)
+
+metrics[['loss','val_loss']].plot()
 decoded_imgs = autoencoder.predict(x_test_noisy)
 n = 10
 plt.figure(figsize=(20, 4))
 for i in range(1, n + 1):
-    # Display original
+    ## Display original
     ax = plt.subplot(3, n, i)
     plt.imshow(x_test_scaled[i].reshape(28, 28))
     plt.gray()
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
 
-    # Display noisy
+    ## Display noisy
     ax = plt.subplot(3, n, i+n)
     plt.imshow(x_test_noisy[i].reshape(28, 28))
     plt.gray()
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)    
 
-    # Display reconstruction
+    ## Display reconstruction
     ax = plt.subplot(3, n, i + 2*n)
     plt.imshow(decoded_imgs[i].reshape(28, 28))
     plt.gray()
@@ -109,12 +119,11 @@ plt.show()
 ```
 
 ## OUTPUT
-
 ### Training Loss, Validation Loss Vs Iteration Plot
-
-![image](https://user-images.githubusercontent.com/75235813/201460928-c8173ced-9cd0-4a3c-a2d8-9b6ca3333738.png)
+![image](https://user-images.githubusercontent.com/75236145/201667674-2cf8977e-81ad-4241-9823-cc447e6e730e.png)
 
 ### Original vs Noisy Vs Reconstructed Image
+![image](https://user-images.githubusercontent.com/75236145/201667712-53bc31af-c86e-4bb8-901d-b10c1a403fa4.png)
 
 ## RESULT
 Thus, a Convolutional Auto Encoder for Denoising was sucessfully implemented.
